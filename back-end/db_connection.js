@@ -79,10 +79,12 @@ module.exports.default = () => {
                 const usernameOwnerCheck = values.username_owner ? true : false
                 const query = `UPDATE events SET event_name='${values.event_name}', event_place='${values.event_place}', event_address='${values.event_address}', event_initial_date='${values.event_initial_date}',
                  event_final_date='${values.event_final_date}',event_type='${values.event_type}' ${usernameOwnerCheck ? `, username_owner='${values.username_owner}'` : ''} WHERE id = ${id}`
-                console.log('-----> query', query)
 
                 result = await client.query(query).catch(e => console.error(e))
                 endClientConn(client)
+                if (result && result.rowCount > 0) {
+                    result = await getEventById(id)
+                }
             } catch (e) {
                 console.error(e)
             }
@@ -92,7 +94,10 @@ module.exports.default = () => {
             let result = null
             try {
                 const client = createClientConn()
-                result = await client.query(`DELETE FROM events WHERE id = '${id}'`).catch(e => console.error(e))
+                const row = await getEventById(id)
+                if (row) {
+                    result = await client.query(`DELETE FROM events WHERE id = '${id}'`).catch(e => console.error(e))
+                }
                 endClientConn(client)
             } catch (e) {
                 console.error(e)
