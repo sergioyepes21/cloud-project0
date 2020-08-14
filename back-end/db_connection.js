@@ -78,7 +78,7 @@ module.exports.default = () => {
                 let values = buildEventValues(event)
                 const usernameOwnerCheck = values.username_owner ? true : false
                 const query = `UPDATE events event_name='${values.event_name}', event_place='${values.event_place}', event_address='${values.event_address}', event_initial_date='${values.event_initial_date}',
-                 event_final_date='${values.event_final_date}',event_type='${values.event_type}' ${usernameOwnerCheck ? `, username_owner='${values.username_owner}'` : ''}) WHERE id = ${id}`
+                 event_final_date='${values.event_final_date}',event_type='${values.event_type}' ${usernameOwnerCheck ? `, username_owner='${values.username_owner}'` : ''} WHERE id = ${id}`
                 console.log('-----> query', query)
 
                 result = await client.query(query).catch(e => console.error(e))
