@@ -63,8 +63,12 @@ module.exports.default = () => {
             client = createClientConn()
             const userValues = buildUserValues(user)
             const userQuery = await getUserByUsername(userValues.username).catch(e => console.error(e))
-            if (userQuery)
-                throw new Error('Username already exists')
+            console.log('----> user', userQuery);
+
+            if (userQuery) {
+                endClientConn(client)
+                return Promise.reject('Username already exists')
+            }
             const query = `INSERT INTO users (username, first_name, last_name, email, password) VALUES (
                     '${userValues.username}','${userValues.first_name}','${userValues.last_name}','${userValues.email}','${userValues.password}'
                 )`
@@ -161,7 +165,8 @@ module.exports.default = () => {
             if (row) {
                 result = await client.query(`DELETE FROM events WHERE id = '${id}'`).catch(e => console.error(e))
             } else {
-                throw new Error('Event does not exists')
+                endClientConn(client)
+                return Promise.reject('Event does not exists')
             }
             endClientConn(client)
         } catch (e) {
