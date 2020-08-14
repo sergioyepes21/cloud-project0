@@ -55,7 +55,7 @@ app.get('/api/events', async (req, res) => {
 
 app.post('/api/events', async (req, res) => {
   const token = getTokenHeader(req)
-  const isValidToken = AuthGeneration().isTokenValid(token)
+  const isValidToken = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'
@@ -69,7 +69,7 @@ app.post('/api/events', async (req, res) => {
 
 app.get('/api/events/:event_id', async (req, res) => {
   const token = getTokenHeader(req)
-  const isValidToken = AuthGeneration().isTokenValid(token)
+  const isValidToken = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'
@@ -83,7 +83,7 @@ app.get('/api/events/:event_id', async (req, res) => {
 
 app.put('/api/events/:event_id', async (req, res) => {
   const token = getTokenHeader(req)
-  const isValidToken = AuthGeneration().isTokenValid(token)
+  const isValidToken = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'
@@ -97,7 +97,7 @@ app.put('/api/events/:event_id', async (req, res) => {
 
 app.delete('/api/events/:event_id', async (req, res) => {
   const token = getTokenHeader(req)
-  const isValidToken = AuthGeneration().isTokenValid(token)
+  const isValidToken = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'
