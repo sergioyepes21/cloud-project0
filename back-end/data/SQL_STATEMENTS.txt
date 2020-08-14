@@ -27,7 +27,7 @@ event_initial_date DATE,
 event_final_date DATE,
 event_type VARCHAR(250),
 thumbnail VARCHAR(250),
-user_id int,
+username_owner VARCHAR(250),
 primary key(id),
-CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id)
+CONSTRAINT fk_user FOREIGN KEY(username_owner) REFERENCES users(username)
 );

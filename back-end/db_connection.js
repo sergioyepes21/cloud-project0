@@ -26,27 +26,77 @@ module.exports.default = () => {
         const values = { event_name, event_place, event_address, event_initial_date, event_final_date, event_type, username_owner }
         return values
     }
+    const buildUserValues = (user) => {
+        user = user ? user : {}
+        const username = user.username ? user.username : ''
+        const first_name = user.first_name ? user.first_name : ''
+        const last_name = user.last_name ? user.last_name : ''
+        const email = user.email ? user.email : ''
+        const password = user.password ? user.password : ''
+        return { username, first_name, last_name, email, password }
+    }
     const transformDate = (date) => {
         date = date ? new Date(date) : new Date()
         return date.toISOString().
             replace(/T/, ' ').
             replace(/\..+/, '')
     }
+    const getUserByUsername = async (username) => {
+        let result = null
+        let client = null
+        try {
+            client = createClientConn()
+            result = await client.query(`SELECT * FROM users WHERE username = ${username}`).catch(e => console.error(e))
+            endClientConn(client)
+        } catch (e) {
+            console.error(e)
+            if (client)
+                endClientConn(client)
+            return Promise.reject(e)
+        }
+        return result && result.rows && result.rows.length > 0 ? result.rows[0] : null
+    }
+    const postUser = async (user) => {
+        let result = null
+        let client = null
+        try {
+            client = createClientConn()
+            const userValues = buildUserValues(user)
+            const userQuery = await getUserByUsername(userValues.username).catch(e => console.error(e))
+            if (userQuery)
+                throw new Error('Username already exists')
+            result = await client.query(`INSERT INTO users (username, first_name, last_name, email, password) VALUES (
+                '${userValues.username}','${userValues.first_name}','${userValues.last_name}','${userValues.email}','${userValues.password}'
+            )`).catch(e => console.error(e))
+            endClientConn(client)
+        } catch (e) {
+            console.error(e)
+            if (client)
+                endClientConn(client)
+            return Promise.reject(e)
+        }
+        return result && result.rows && result.rows.length > 0 ? result.rows[0] : null
+    }
     const getEvents = async () => {
         let result = null
+        let client = null
         try {
-            const client = createClientConn()
+            client = createClientConn()
             result = await client.query('SELECT * FROM events').catch(e => console.error(e))
             endClientConn(client)
         } catch (e) {
             console.error(e)
+            if (client)
+                endClientConn(client)
+            return Promise.reject(e)
         }
         return result ? result.rows : []
     }
     const postEvents = async (event) => {
         let result = null
+        let client = null
         try {
-            const client = createClientConn()
+            client = createClientConn()
             const values = buildEventValues(event)
             const usernameOwnerCheck = values.username_owner ? true : false
             const query = `INSERT INTO events(event_name, event_place, event_address, event_initial_date, event_final_date, event_type ${usernameOwnerCheck ? ', username_owner' : ''}) VALUES
@@ -56,24 +106,32 @@ module.exports.default = () => {
             endClientConn(client)
         } catch (e) {
             console.error(e)
+            if (client)
+                endClientConn(client)
+            return Promise.reject(e)
         }
         return result && result.rows && result.rows.length > 0 ? result.rows[0] : null
     }
     const getEventById = async (id) => {
         let result = null
+        let client = null
         try {
-            const client = createClientConn()
+            client = createClientConn()
             result = await client.query(`SELECT * FROM events WHERE id = '${id}'`).catch(e => console.error(e))
             endClientConn(client)
         } catch (e) {
             console.error(e)
+            if (client)
+                endClientConn(client)
+            return Promise.reject(e)
         }
         return result && result.rows && result.rows.length > 0 ? result.rows[0] : null
     }
     const putEvents = async (id, event) => {
         let result = null
+        let client = null
         try {
-            const client = createClientConn()
+            client = createClientConn()
             let values = buildEventValues(event)
             const usernameOwnerCheck = values.username_owner ? true : false
             const query = `UPDATE events SET event_name='${values.event_name}', event_place='${values.event_place}', event_address='${values.event_address}', event_initial_date='${values.event_initial_date}',
@@ -86,22 +144,31 @@ module.exports.default = () => {
             }
         } catch (e) {
             console.error(e)
+            if (client)
+                endClientConn(client)
+            return Promise.reject(e)
         }
         return result
     }
     const deleteEvent = async (id) => {
         let result = null
+        let client = null
         try {
-            const client = createClientConn()
+            client = createClientConn()
             const row = await getEventById(id)
             if (row) {
                 result = await client.query(`DELETE FROM events WHERE id = '${id}'`).catch(e => console.error(e))
+            } else {
+                throw new Error('Event does not exists')
             }
             endClientConn(client)
         } catch (e) {
             console.error(e)
+            if (client)
+                endClientConn(client)
+            return Promise.reject(e)
         }
-        return result
+        return row
     }
     return {
         getEvents,
