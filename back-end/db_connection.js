@@ -41,12 +41,12 @@ module.exports.default = () => {
             replace(/T/, ' ').
             replace(/\..+/, '')
     }
-    const getUserByUsername = async (username) => {
+    const getUserByUsernameOrEmail = async (username, email) => {
         let result = null
         let client = null
         try {
             client = createClientConn()
-            result = await client.query(`SELECT * FROM users WHERE username = '${username}'`).catch(e => console.error(e))
+            result = await client.query(`SELECT * FROM users WHERE username = '${username}' OR email = '${email}'`).catch(e => console.error(e))
             endClientConn(client)
         } catch (e) {
             console.error(e)
@@ -62,10 +62,10 @@ module.exports.default = () => {
         try {
             client = createClientConn()
             const userValues = buildUserValues(user)
-            const userQuery = await getUserByUsername(userValues.username).catch(e => console.error(e))
+            const userQuery = await getUserByUsernameOrEmail(userValues.username, userValues.email).catch(e => console.error(e))
             console.log('----> user', userQuery);
             if (userQuery)
-                throw new Error('Username already exists')
+                throw new Error('Username or email already exists')
             const query = `INSERT INTO users (username, first_name, last_name, email, password) VALUES (
                     '${userValues.username}','${userValues.first_name}','${userValues.last_name}','${userValues.email}','${userValues.password}'
                 ) RETURNING *`
@@ -78,7 +78,13 @@ module.exports.default = () => {
                 endClientConn(client)
             return Promise.reject(e)
         }
-        return result && result.rows && result.rows.length > 0 ? result.rows[0] : null
+        if (result && result.rows && result.rows.length > 0) {
+            result = result.rows[0]
+            delete result.password
+        } else {
+            result = null
+        }
+        return result
     }
     const getEvents = async () => {
         let result = null
