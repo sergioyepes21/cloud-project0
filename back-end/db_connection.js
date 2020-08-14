@@ -3,7 +3,6 @@ const appsettings = require('./data/appsettings.json')
 
 module.exports.default = () => {
     const createClientConn = () => {
-        console.log('Va a crear conn')
         const client = new Client(appsettings)
         client.connect()
         return client
