@@ -14,14 +14,14 @@ module.exports.default = () => {
     }
     const buildEventValues = (event) => {
         event = event ? event : {}
-        const name = event.name ? event.name : ''
-        const place = event.place ? event.place : ''
-        const address = event.address ? event.address : ''
-        const start_date = event.start_date ? event.start_date : new Date()
-        const end_date = event.end_date ? event.end_date : new Date()
-        const is_virtual = event.is_virtual != null && event.is_virtual != undefined ? event.is_virtual : false
-        const user_id = event.user_id ? event.user_id : null
-        const values = [name, place, address, start_date, end_date, is_virtual, user_id]
+        const event_name = event.event_name ? event.event_name : ''
+        const event_place = event.event_place ? event.event_place : ''
+        const event_address = event.event_address ? event.event_address : ''
+        const event_initial_date = event.event_initial_date ? event.event_initial_date : new Date()
+        const event_final_date = event.event_final_date ? event.event_final_date : new Date()
+        const event_type = event.event_type ? event.event_type : ''
+        const username_owner = event.username_owner ? event.username_owner : null
+        const values = [event_name, event_place, event_address, event_initial_date, event_final_date, event_type, username_owner]
         return values
     }
     return {
@@ -33,7 +33,7 @@ module.exports.default = () => {
         },
         postEvents: async (event) => {
             const client = createClientConn()
-            const query = 'INSERT INTO events(name, place, address, start_date, end_date, is_virtual, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *'
+            const query = 'INSERT INTO events(event_name, event_place, event_address, event_initial_date, event_final_date, event_type, username_owner) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *'
             const values = buildEventValues(event)
             const result = await client.query(query, values).catch(e => console.error(e))
             endClientConn(client)
@@ -47,7 +47,7 @@ module.exports.default = () => {
         },
         putEvents: async (id, event) => {
             const client = createClientConn()
-            const query = 'UPDATE events SET name = $1, place = $2, address = $3, start_date = $4, end_date = $5, is_virtual = $6, user_id = $7 WHERE id = $8'
+            const query = 'UPDATE events SET event_name = $1, event_place = $2, event_address = $3, event_initial_date = $4, event_final_date = $5, event_type = $6, username_owner = $7 WHERE id = $8'
             let values = buildEventValues(event)
             values.push(id)
             const result = await client.query(query, values).catch(e => console.error(e))
