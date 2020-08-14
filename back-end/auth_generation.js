@@ -5,8 +5,18 @@ module.exports.default = () => {
         const token = jwt.sign({ data }, 'shhhhh')
         return token
     }
+    const isValidToken = (token) => {
+        try {
+            const decoded = jwt.verify(token, 'shhhhh')
+            return true
+        } catch (e) {
+            console.error(e)
+            return false
+        }
+    }
     return {
-        generateAuthToken
+        generateAuthToken,
+        isValidToken
     }
 
 }
