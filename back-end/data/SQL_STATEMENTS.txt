@@ -1,0 +1,33 @@
+CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES user_cloud(id),
+
+create table event_category (
+id int generated always as identity,
+event_id int,
+category_id int,
+CONSTRAINT fk_event FOREIGN KEY(event_id) REFERENCES event(id),
+CONSTRAINT fk_category FOREIGN KEY(category_id) REFERENCES category(id)
+);
+
+CREATE TABLE users(
+username VARCHAR(250) NOT NULL,
+first_name VARCHAR(250),
+last_name VARCHAR(250),
+email VARCHAR(250),
+password VARCHAR(250),
+primary key(username)
+);
+
+CREATE TABLE events(
+id int generated always as identity,
+event_name VARCHAR(250),
+event_category VARCHAR(250),
+event_place VARCHAR(250),
+event_address VARCHAR(250),
+event_initial_date DATE,
+event_final_date DATE,
+event_type VARCHAR(250),
+thumbnail VARCHAR(250),
+user_id int,
+primary key(id),
+CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id)
+);
