@@ -5,7 +5,7 @@ const DbConnection = require('./db_connection').default
 const AuthGeneration = require('./auth_generation').default
 
 app.use(express.json())
-app.use(express.urlencoded())
+// app.use(express.urlencoded())
 
 app.post('/api/create-user', async (req, res) => {
   res.json(await DbConnection().postUser(req.body).catch(e => {
@@ -16,8 +16,8 @@ app.post('/api/create-user', async (req, res) => {
 app.post('/api/api-auth', async (req, res) => {
   const username = req.body.username
   const password = req.body.password
-  console.log('.---> body', body)
-  console.log('.---> query', query)
+  console.log('.---> body', req.body)
+  console.log('.---> query', req.query)
 
   const user = await DbConnection().getUserByUsernameAndPassword(username, password).catch(e => console.error(e));
   if (!user) {
