@@ -8,7 +8,9 @@ app.use(express.json())
 app.use(express.urlencoded())
 
 const getTokenHeader = (req) => {
+  console.log('header', req)
   const headers = req.headers
+  console.log('----------> headers', headers)
   const token = headers && headers['Authorization'] ? headers['Authorization'].split('Token ')[0] : null
   return token
 }
