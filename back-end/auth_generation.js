@@ -6,7 +6,12 @@ module.exports.default = () => {
         return token
     }
     const isValidToken = (token) => {
+        if(!token){
+            return false
+        }
         try {
+            console.log('token', token)
+            
             const decoded = jwt.verify(token, 'shhhhh')
             return true
         } catch (e) {
