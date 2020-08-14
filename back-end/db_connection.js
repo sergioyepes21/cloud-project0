@@ -68,7 +68,7 @@ module.exports.default = () => {
                 throw new Error('Username already exists')
             const query = `INSERT INTO users (username, first_name, last_name, email, password) VALUES (
                     '${userValues.username}','${userValues.first_name}','${userValues.last_name}','${userValues.email}','${userValues.password}'
-                )`
+                ) RETURNING *`
             console.log('------> query', query)
             result = await client.query(query).catch(e => console.error(e))
             endClientConn(client)
