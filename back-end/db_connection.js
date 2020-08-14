@@ -56,6 +56,24 @@ module.exports.default = () => {
         }
         return result && result.rows && result.rows.length > 0 ? result.rows[0] : null
     }
+    const getUserByUsernameAndPassword = async (username, password) => {
+        let result = null
+        let client = null
+        try {
+            client = createClientConn()
+            result = await client.query(`SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`).catch(e => console.error(e))
+            endClientConn(client)
+        } catch (e) {
+            console.error(e)
+            if (client)
+                endClientConn(client)
+            return Promise.reject(e)
+        }
+        result = result && result.rows && result.rows.length > 0 ? result.rows[0] : null
+        if (result)
+            delete result.password
+        return result
+    }
     const postUser = async (user) => {
         let result = null
         let client = null
@@ -180,6 +198,7 @@ module.exports.default = () => {
         return row
     }
     return {
+        getUserByUsernameAndPassword,
         postUser,
         getEvents,
         postEvents,

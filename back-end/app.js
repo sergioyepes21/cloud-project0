@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const DbConnection = require('./db_connection').default
+const AuthGeneration = require('./auth_generation').default
 
 app.use(express.json())
 
@@ -12,9 +13,17 @@ app.post('/api/create-user', async (req, res) => {
 })
 
 app.post('/api/api-auth', async (req, res) => {
-  res.json({
-    msg: 'done'
-  });
+  const username = req.body.username
+  const password = req.body.password
+  const user = await DbConnection().getUserByUsernameAndPassword(username, password).catch(e => console.error(e));
+  if (!user) {
+    res.status(401).send({
+      msg: 'Invalid username or password'
+    })
+  }
+  const token = AuthGeneration().generateAuthToken(user);
+
+  res.json({ token });
 })
 
 app.get('/api/events', async (req, res) => {
