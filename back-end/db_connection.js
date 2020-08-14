@@ -9,8 +9,11 @@ module.exports.default = () => {
         return client
     }
     const endClientConn = (client) => {
-        if (client)
+        try {
             client.end()
+        } catch (e) {
+            console.error(e)
+        }
     }
     const buildEventValues = (event) => {
         event = event ? event : {}
