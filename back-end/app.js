@@ -39,7 +39,7 @@ app.post('/api/api-auth', async (req, res) => {
 
 app.get('/api/events', async (req, res) => {
   const token = getTokenHeader(req)
-  const isValidToken = AuthGeneration().isTokenValid(token)
+  const isValidToken = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'
