@@ -11,7 +11,7 @@ const getTokenHeader = (req) => {
   console.log('header', req)
   const headers = req.headers
   console.log('----------> headers', headers)
-  const token = headers && headers.authorization ? headers.authorization.split('Token ')[0] : null
+  const token = headers && headers.authorization ? headers.authorization.replace(/Token /, '') : null
   return token
 }
 
