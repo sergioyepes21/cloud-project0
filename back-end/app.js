@@ -6,7 +6,7 @@ const DbConnection = require('./db_connection').default
 app.use(express.json())
 
 app.post('/api/create-user', async (req, res) => {
-  res.json(await DbConnection().getEvents());
+  res.json(await DbConnection().postUser(req.body));
 })
 
 app.post('/api/api-auth', async (req, res) => {

@@ -171,6 +171,7 @@ module.exports.default = () => {
         return row
     }
     return {
+        postUser,
         getEvents,
         postEvents,
         getEventById,
