@@ -61,6 +61,9 @@ module.exports.default = () => {
         let client = null
         try {
             client = createClientConn()
+            console.log('----->username', username)
+            console.log('---->pasword', password)
+
             result = await client.query(`SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`).catch(e => console.error(e))
             endClientConn(client)
         } catch (e) {
@@ -70,6 +73,7 @@ module.exports.default = () => {
             return Promise.reject(e)
         }
         result = result && result.rows && result.rows.length > 0 ? result.rows[0] : null
+        console.log('---->result', result)
         if (result)
             delete result.password
         return result

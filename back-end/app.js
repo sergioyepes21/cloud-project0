@@ -20,10 +20,10 @@ app.post('/api/api-auth', async (req, res) => {
     res.status(401).send({
       msg: 'Invalid username or password'
     })
+  } else {
+    const token = AuthGeneration().generateAuthToken(user);
+    res.json({ token });
   }
-  const token = AuthGeneration().generateAuthToken(user);
-
-  res.json({ token });
 })
 
 app.get('/api/events', async (req, res) => {
