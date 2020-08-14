@@ -46,7 +46,7 @@ module.exports.default = () => {
         let client = null
         try {
             client = createClientConn()
-            result = await client.query(`SELECT * FROM users WHERE username = ${username}`).catch(e => console.error(e))
+            result = await client.query(`SELECT * FROM users WHERE username = '${username}'`).catch(e => console.error(e))
             endClientConn(client)
         } catch (e) {
             console.error(e)
@@ -65,9 +65,11 @@ module.exports.default = () => {
             const userQuery = await getUserByUsername(userValues.username).catch(e => console.error(e))
             if (userQuery)
                 throw new Error('Username already exists')
-            result = await client.query(`INSERT INTO users (username, first_name, last_name, email, password) VALUES (
-                '${userValues.username}','${userValues.first_name}','${userValues.last_name}','${userValues.email}','${userValues.password}'
-            )`).catch(e => console.error(e))
+            const query = `INSERT INTO users (username, first_name, last_name, email, password) VALUES (
+                    '${userValues.username}','${userValues.first_name}','${userValues.last_name}','${userValues.email}','${userValues.password}'
+                )`
+            console.log('------> query', query)
+            result = await client.query(query).catch(e => console.error(e))
             endClientConn(client)
         } catch (e) {
             console.error(e)
