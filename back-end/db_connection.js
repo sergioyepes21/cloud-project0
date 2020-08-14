@@ -58,7 +58,7 @@ module.exports.default = () => {
             } catch (e) {
                 console.error(e)
             }
-            return result
+            return result && result.rows && result.rows.length > 0 ? result.rows[0] : null
         },
         getEventById: async (id) => {
             let result = null
@@ -75,9 +75,12 @@ module.exports.default = () => {
             let result = null
             try {
                 const client = createClientConn()
-                const query = `UPDATE events SET event_name = '$1', event_place = '$2', event_address = '$3', event_initial_date = '$4', event_final_date = '$5', event_type = '$6', username_owner = '$7' WHERE id = '$8'`
                 let values = buildEventValues(event)
-                values.push(id)
+                const usernameOwnerCheck = values.username_owner ? true : false
+                const query = `UPDATE events event_name='${values.event_name}', event_place='${values.event_place}', event_address='${values.event_address}', event_initial_date='${values.event_initial_date}',
+                 event_final_date='${values.event_final_date}',event_type='${values.event_type}' ${usernameOwnerCheck ? `, username_owner='${values.username_owner}'` : ''}) WHERE id = ${id}`
+                console.log('-----> query', query)
+
                 result = await client.query(query, values).catch(e => console.error(e))
                 endClientConn(client)
             } catch (e) {
