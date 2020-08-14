@@ -46,7 +46,7 @@ module.exports.default = () => {
                 const query = `INSERT INTO events(event_name, event_place, event_address, event_initial_date, event_final_date, event_type, username_owner) VALUES
                  ('${values.event_name}', '${values.event_place}', '${values.event_address}', '${values.event_initial_date}', '${values.event_final_date}', '${values.event_type}', '${values.username_owner}') RETURNING *`
 
-                result = await client.query(query, values).catch(e => console.error(e))
+                result = await client.query(query).catch(e => console.error(e))
                 endClientConn(client)
             } catch (e) {
                 console.error(e)
