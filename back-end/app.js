@@ -1,9 +1,12 @@
 const express = require('express')
+var cors = require('cors')
 const app = express()
 const port = 3000
 const DbConnection = require('./db_connection').default
 const AuthGeneration = require('./auth_generation').default
 
+
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
 
