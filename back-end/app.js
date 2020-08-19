@@ -44,7 +44,7 @@ app.post('/api/api-auth', async (req, res) => {
 
 app.get('/api/events', async (req, res) => {
   const token = getTokenHeader(req)
-  const [isValidToken, decoded] = AuthGeneration().isValidToken(token)
+  let [isValidToken, decoded] = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'
@@ -58,21 +58,21 @@ app.get('/api/events', async (req, res) => {
 
 app.post('/api/events', async (req, res) => {
   const token = getTokenHeader(req)
-  const [isValidToken, decoded] = AuthGeneration().isValidToken(token)
+  let [isValidToken, decoded] = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'
     })
     return
   }
-  res.json(await DbConnection().postEvents(req.body).catch(e => res.status(500).send({
+  res.json(await DbConnection().postEvents(req.body, decoded).catch(e => res.status(500).send({
     error: e
   })));
 })
 
 app.get('/api/events/:event_id', async (req, res) => {
   const token = getTokenHeader(req)
-  const [isValidToken, decoded] = AuthGeneration().isValidToken(token)
+  let [isValidToken, decoded] = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'
@@ -86,7 +86,7 @@ app.get('/api/events/:event_id', async (req, res) => {
 
 app.put('/api/events/:event_id', async (req, res) => {
   const token = getTokenHeader(req)
-  const [isValidToken, decoded] = AuthGeneration().isValidToken(token)
+  let [isValidToken, decoded] = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'
@@ -100,7 +100,7 @@ app.put('/api/events/:event_id', async (req, res) => {
 
 app.delete('/api/events/:event_id', async (req, res) => {
   const token = getTokenHeader(req)
-  const [isValidToken, decoded] = AuthGeneration().isValidToken(token)
+  let [isValidToken, decoded] = AuthGeneration().isValidToken(token)
   if (!isValidToken) {
     res.status(401).send({
       msg: 'You must provide a valid token'

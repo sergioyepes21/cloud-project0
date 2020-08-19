@@ -115,7 +115,9 @@ module.exports.default = () => {
             client = createClientConn()
             const query = 'SELECT * FROM events'
             if (user) {
-                query += ` WHERE ID = ${user.id}`;
+                console.log('user',user);
+                
+                query += ` WHERE username_owner = ${user.username}`;
             }
             result = await client.query(query).catch(e => console.error(e))
             endClientConn(client)
@@ -127,12 +129,15 @@ module.exports.default = () => {
         }
         return result ? result.rows : []
     }
-    const postEvents = async (event) => {
+    const postEvents = async (event, user = null) => {
         let result = null
         let client = null
         try {
             client = createClientConn()
             const values = buildEventValues(event)
+            if(user){
+                values.username_owner = user.username;
+            }
             const usernameOwnerCheck = values.username_owner ? true : false
             const query = `INSERT INTO events(event_name, event_place, event_address, event_initial_date, event_final_date, event_type ${usernameOwnerCheck ? ', username_owner' : ''}) VALUES
              ('${values.event_name}', '${values.event_place}', '${values.event_address}', '${values.event_initial_date}', '${values.event_final_date}', '${values.event_type}' ${usernameOwnerCheck ? `, '${values.username_owner}'` : ''}) RETURNING *`

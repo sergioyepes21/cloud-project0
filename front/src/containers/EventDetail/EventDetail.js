@@ -21,7 +21,7 @@ export default function Home(props) {
     if (props && props.match && props.match.params && props.match.params.event_id) {
         setEventId(props.match.params.event_id);
     }
-    if (event_id > 0 && !eventComponent) {
+    if (false && event_id > 0 && !eventComponent) {
         backService(token).getEventbyId(event_id).then(res => {
             if (res && res.data) {
                 const event = res.data;
