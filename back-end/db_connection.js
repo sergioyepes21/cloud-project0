@@ -113,7 +113,7 @@ module.exports.default = () => {
         let client = null
         try {
             client = createClientConn()
-            const query = 'SELECT * FROM events'
+            let query = 'SELECT * FROM events'
             if (user) {
                 console.log('user',user);
                 
@@ -134,7 +134,7 @@ module.exports.default = () => {
         let client = null
         try {
             client = createClientConn()
-            const values = buildEventValues(event)
+            let values = buildEventValues(event)
             if(user){
                 values.username_owner = user.username;
             }
