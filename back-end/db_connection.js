@@ -117,7 +117,7 @@ module.exports.default = () => {
             if (user) {
                 console.log('user',user);
                 
-                query += ` WHERE username_owner = ${user.username}`;
+                query += ` WHERE username_owner = ${user.data.username}`;
             }
             result = await client.query(query).catch(e => console.error(e))
             endClientConn(client)
@@ -136,7 +136,7 @@ module.exports.default = () => {
             client = createClientConn()
             let values = buildEventValues(event)
             if(user){
-                values.username_owner = user.username;
+                values.username_owner = user.data.username;
             }
             const usernameOwnerCheck = values.username_owner ? true : false
             const query = `INSERT INTO events(event_name, event_place, event_address, event_initial_date, event_final_date, event_type ${usernameOwnerCheck ? ', username_owner' : ''}) VALUES
