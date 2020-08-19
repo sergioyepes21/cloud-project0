@@ -117,7 +117,7 @@ module.exports.default = () => {
             if (user) {
                 console.log('user',user);
                 
-                query += ` WHERE username_owner = ${user.data.username}`;
+                query += ` WHERE username_owner = '${user.data.username}'`;
             }
             result = await client.query(query).catch(e => console.error(e))
             endClientConn(client)
