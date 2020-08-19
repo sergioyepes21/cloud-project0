@@ -15,17 +15,26 @@ export default function Login() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        const user = {
+        const postUser = {
             email,
             username,
             first_name: name,
             password
         }
-        backService().createUser(user).then(res => {
-            console.log('res', res);
-
+        backService().createUser(postUser).then(res => {
+            if (res.data) {
+                backService().apiAuth(username, password).then(res => {
+                    console.log('res', res.data);
+                    if (res && res.data && res.data.token) {
+                        sessionStorage.setItem('token', res.data.token);
+                    }
+                }).catch(e => {
+                    console.error(e)
+                })
+            }
         }).catch(e => {
             console.error(e);
+            alert('There has been an unexpected error. Try later.')
         })
     }
 

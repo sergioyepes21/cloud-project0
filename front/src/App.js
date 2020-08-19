@@ -1,8 +1,10 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
-import logo from './logo.svg';
+import { BrowserRouter, Route, useHistory } from 'react-router-dom';
 import SignUp from './containers/SignUp/SignUp';
 import Login from './containers/Login/Login';
+import Home from './containers/Home/Home';
+import EventDetail from './containers/EventDetail/EventDetail';
+
 import { Container } from "react-bootstrap";
 import './App.css';
 
@@ -13,7 +15,9 @@ function App() {
         <div>
           <Container>
             <Route path="/signup" exact component={SignUp} />
-            <Route path="/login" exact component={Login} />
+            <Route path="/" exact component={Login} />
+            <Route path="/home" exact component={Home} />
+            <Route path="/events/:event_id" exact component={EventDetail} />
           </Container>
         </div>
       </div>

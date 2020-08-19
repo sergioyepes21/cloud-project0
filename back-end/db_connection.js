@@ -108,12 +108,16 @@ module.exports.default = () => {
         }
         return result
     }
-    const getEvents = async () => {
+    const getEvents = async (user = null) => {
         let result = null
         let client = null
         try {
             client = createClientConn()
-            result = await client.query('SELECT * FROM events').catch(e => console.error(e))
+            const query = 'SELECT * FROM events'
+            if (user) {
+                query += ` WHERE ID = ${user.id}`;
+            }
+            result = await client.query(query).catch(e => console.error(e))
             endClientConn(client)
         } catch (e) {
             console.error(e)

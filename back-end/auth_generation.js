@@ -7,15 +7,15 @@ module.exports.default = () => {
     }
     const isValidToken = (token) => {
         console.log('token', token)
-        if(!token){
-            return false
+        if (!token) {
+            return [false, null]
         }
-        try {            
+        try {
             const decoded = jwt.verify(token, 'shhhhh')
-            return true
+            return [true, decoded]
         } catch (e) {
             console.error(e)
-            return false
+            return [false, null]
         }
     }
     return {
