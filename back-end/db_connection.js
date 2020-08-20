@@ -115,8 +115,8 @@ module.exports.default = () => {
             client = createClientConn()
             let query = 'SELECT * FROM events'
             if (user) {
-                console.log('user',user);
-                
+                console.log('user', user);
+
                 query += ` WHERE username_owner = '${user.data.username}'`;
             }
             result = await client.query(query).catch(e => console.error(e))
@@ -135,7 +135,7 @@ module.exports.default = () => {
         try {
             client = createClientConn()
             let values = buildEventValues(event)
-            if(user){
+            if (user) {
                 values.username_owner = user.data.username;
             }
             const usernameOwnerCheck = values.username_owner ? true : false
@@ -174,8 +174,18 @@ module.exports.default = () => {
             client = createClientConn()
             let values = buildEventValues(event)
             const usernameOwnerCheck = values.username_owner ? true : false
-            const query = `UPDATE events SET event_name='${values.event_name}', event_place='${values.event_place}', event_address='${values.event_address}', event_initial_date='${values.event_initial_date}',
-             event_final_date='${values.event_final_date}',event_type='${values.event_type}' ${usernameOwnerCheck ? `, username_owner='${values.username_owner}'` : ''} WHERE id = ${id}`
+            let query = 'UPDATE events SET '
+            const entries = Object.entries(event)
+            let suffix = ','
+            entries.forEach((pair, index) => {
+                if (index == entries.length - 1) {
+                    suffix = ''
+                }
+                query += `${pair[0]} = '${pair[1]}'` + suffix
+            })
+            query += ` WHERE ID = '${id}'`
+            // const query = `UPDATE events SET event_name='${values.event_name}', event_place='${values.event_place}', event_address='${values.event_address}', event_initial_date='${values.event_initial_date}',
+            //  event_final_date='${values.event_final_date}',event_type='${values.event_type}' ${usernameOwnerCheck ? `, username_owner='${values.username_owner}'` : ''} WHERE id = ${id}`
 
             result = await client.query(query).catch(e => console.error(e))
             endClientConn(client)
