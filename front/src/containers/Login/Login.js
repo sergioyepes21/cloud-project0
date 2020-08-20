@@ -16,7 +16,7 @@ export default function Login(props) {
         backService().apiAuth(username, password).then(res => {
             if (res && res.data && res.data.token) {
                 sessionStorage.setItem('token', res.data.token);
-                props.history.push('home');                
+                props.history.push('home');
             }
         }).catch(e => {
             console.error(e)
@@ -47,7 +47,12 @@ export default function Login(props) {
                 </Form.Group>
                 <Button variant="primary" type="submit" disabled={!validateForm()}>
                     Submit
-    </Button>
+                </Button>
+                <Button variant="primary" onClick={(e) => {
+                props.history.push('signup');
+                }}>
+                    Sign up
+                </Button>
             </Form>
         </div>
     );

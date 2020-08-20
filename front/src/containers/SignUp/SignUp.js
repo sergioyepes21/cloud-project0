@@ -3,7 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import "./SignUp.css";
 import backService from '../../services/backServices';
 
-export default function Login() {
+export default function SignUp(props) {
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [name, setName] = useState("");
@@ -27,6 +27,7 @@ export default function Login() {
                     console.log('res', res.data);
                     if (res && res.data && res.data.token) {
                         sessionStorage.setItem('token', res.data.token);
+                        props.history.push('home');
                     }
                 }).catch(e => {
                     console.error(e)
@@ -82,7 +83,12 @@ export default function Login() {
                 </Form.Group>
                 <Button variant="primary" type="submit" disabled={!validateForm()}>
                     Submit
-    </Button>
+                </Button>
+                <Button variant="primary" onClick={(e) => {
+                    props.history.push('');
+                }}>
+                    Login
+                </Button>
             </Form>
         </div>
     );

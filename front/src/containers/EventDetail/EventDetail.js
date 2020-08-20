@@ -158,15 +158,15 @@ export default function Home(props) {
                 <Row>
                     <Col sm={12}>
                         <Button type="submit">
-                            {eventId > 0 ? 'Editar' : 'Guardar'}
+                            {eventId > 0 ? 'Update' : 'Save'}
                         </Button>
                     </Col>
                     <Col sm={12}>
-                        <Button disabled={eventId <= 0} onClick={e => onDeleteClick(e)}>Eliminar</Button>
+                        <Button disabled={eventId <= 0} onClick={e => onDeleteClick(e)}>Delete</Button>
                     </Col>
                 </Row>
             </Form>
-            <Button onClick={e => props.history.push('/home')}>Volver</Button>
+            <Button onClick={e => props.history.push('/home')}>Back</Button>
         </div>
     );
 }

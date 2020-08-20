@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form, Accordion, Card } from "react-bootstrap";
 import "./Home.css";
-import backService from '../../services/backServices';
+import backServices from '../../services/backServices';
 
 export default function Home(props) {
     const token = sessionStorage.getItem('token');
@@ -13,7 +13,7 @@ export default function Home(props) {
         if (events.length > 0) {
             return;
         }
-        backService(token).getEvents().then(res => {
+        backServices(token).getEvents().then(res => {
             if (res && res.data && res.data.length > 0) {
                 createEventList(res.data);
             }
@@ -33,7 +33,8 @@ export default function Home(props) {
                     <Accordion.Collapse eventKey={e.id}>
                         <Card.Body>
                             <h3>{e.event_address}</h3>
-                            <Button id={e.id} onClick={() => onDetailClick(e.id)}>Ver más</Button>
+                            <Button id={e.id} onClick={() => onDetailClick(e.id)}>Event Detail</Button>
+                            <Button id={e.id} onClick={() => onDeleteClick(e.id)}>Delete</Button>
                         </Card.Body>
                     </Accordion.Collapse>
                 </Card>
@@ -44,6 +45,16 @@ export default function Home(props) {
     function onDetailClick(event_id) {
         props.history.push(`events/${event_id}`);
     }
+    const onDeleteClick = (eventId) => {
+        backServices(token).deleteEvent(eventId).then(res => {
+            alert('Deleted successfully')
+            // props.history.push('/home')
+            window.location.reload();
+        }).catch(e => {
+            console.error(e);
+            alert('Unexpected error. Try Later')
+        })
+    }
     getEvents();
     return (
         <div className="Home">
@@ -51,7 +62,11 @@ export default function Home(props) {
             <Accordion defaultActiveKey="0">
                 {events}
             </Accordion>
-            <Button onClick={e => props.history.push('/events/0')}>Nuevo</Button>
+            <Button onClick={e => props.history.push('/events/0')}>New</Button>
+            <Button onClick={e => {
+                sessionStorage.removeItem('token')
+                props.history.push('/')
+            }}>Log out</Button>
         </div>
     );
 }
