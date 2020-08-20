@@ -46,9 +46,7 @@ app.get('/api/events', async (req, res) => {
     })
     return
   }
-  res.json(await DbConnection().getEvents(decoded).catch(e => res.status(500).send({
-    error: e
-  })));
+  res.json(await DbConnection().getEvents(decoded).catch(e => console.error(e)));
 })
 
 app.post('/api/events', async (req, res) => {
@@ -60,9 +58,7 @@ app.post('/api/events', async (req, res) => {
     })
     return
   }
-  res.json(await DbConnection().postEvents(req.body, decoded).catch(e => res.status(500).send({
-    error: e
-  })));
+  res.json(await DbConnection().postEvents(req.body, decoded).catch(e => console.error(e)));
 })
 
 app.get('/api/events/:event_id', async (req, res) => {
@@ -74,9 +70,7 @@ app.get('/api/events/:event_id', async (req, res) => {
     })
     return
   }
-  res.json(await DbConnection().getEventById(req.params.event_id).catch(e => res.status(500).send({
-    error: e
-  })));
+  res.json(await DbConnection().getEventById(req.params.event_id).catch(e => console.error(e)));
 })
 
 app.put('/api/events/:event_id', async (req, res) => {
@@ -88,9 +82,7 @@ app.put('/api/events/:event_id', async (req, res) => {
     })
     return
   }
-  res.json(await DbConnection().putEvents(req.params.event_id, req.body).catch(e => res.status(500).send({
-    error: e
-  })));
+  res.json(await DbConnection().putEvents(req.params.event_id, req.body).catch(e => console.error(e)));
 })
 
 app.delete('/api/events/:event_id', async (req, res) => {
@@ -102,9 +94,7 @@ app.delete('/api/events/:event_id', async (req, res) => {
     })
     return
   }
-  const bodyResponse = await DbConnection().deleteEvent(req.params.event_id).catch(e => res.status(500).send({
-    error: e
-  }))
+  const bodyResponse = await DbConnection().deleteEvent(req.params.event_id).catch(e => console.error(e))
   console.log('bodyResponse',bodyResponse);
   
   res.json(bodyResponse)

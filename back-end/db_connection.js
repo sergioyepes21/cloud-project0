@@ -61,9 +61,6 @@ module.exports.default = () => {
         let client = null
         try {
             client = createClientConn()
-            console.log('----->username', username)
-            console.log('---->pasword', password)
-
             result = await client.query(`SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`).catch(e => console.error(e))
             endClientConn(client)
         } catch (e) {
@@ -73,7 +70,6 @@ module.exports.default = () => {
             return Promise.reject(e)
         }
         result = result && result.rows && result.rows.length > 0 ? result.rows[0] : null
-        console.log('---->result', result)
         if (result)
             delete result.password
         return result
@@ -85,13 +81,11 @@ module.exports.default = () => {
             client = createClientConn()
             const userValues = buildUserValues(user)
             const userQuery = await getUserByUsernameOrEmail(userValues.username, userValues.email).catch(e => console.error(e))
-            console.log('----> user', userQuery);
             if (userQuery)
                 throw new Error('Username or email already exists')
             const query = `INSERT INTO users (username, first_name, last_name, email, password) VALUES (
                     '${userValues.username}','${userValues.first_name}','${userValues.last_name}','${userValues.email}','${userValues.password}'
                 ) RETURNING *`
-            console.log('------> query', query)
             result = await client.query(query).catch(e => console.error(e))
             endClientConn(client)
         } catch (e) {
@@ -115,8 +109,6 @@ module.exports.default = () => {
             client = createClientConn()
             let query = 'SELECT * FROM events'
             if (user) {
-                console.log('user', user);
-
                 query += ` WHERE username_owner = '${user.data.username}'`;
             }
             result = await client.query(query).catch(e => console.error(e))
@@ -210,6 +202,7 @@ module.exports.default = () => {
             console.log('row', row);
             if (row) {
                 result = await client.query(`DELETE FROM events WHERE id = '${id}'`).catch(e => console.error(e))
+                console.log('result', result);
             } else {
                 throw new Error('Event does not exists')
             }
