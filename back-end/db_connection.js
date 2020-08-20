@@ -19,8 +19,8 @@ module.exports.default = () => {
         const event_name = event.event_name ? event.event_name : ''
         const event_place = event.event_place ? event.event_place : ''
         const event_address = event.event_address ? event.event_address : ''
-        const event_initial_date = transformDate(event.event_initial_date)
-        const event_final_date = transformDate(event.event_final_date)
+        const event_initial_date = event.event_initial_date
+        const event_final_date = event.event_final_date
         const event_type = event.event_type ? event.event_type : ''
         const username_owner = event.username_owner ? event.username_owner : null
         const values = { event_name, event_place, event_address, event_initial_date, event_final_date, event_type, username_owner }
@@ -175,6 +175,7 @@ module.exports.default = () => {
             let values = buildEventValues(event)
             const usernameOwnerCheck = values.username_owner ? true : false
             let query = 'UPDATE events SET '
+            delete event.id
             const entries = Object.entries(event)
             let suffix = ','
             entries.forEach((pair, index) => {
