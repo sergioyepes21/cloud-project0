@@ -196,13 +196,12 @@ module.exports.default = () => {
     const deleteEvent = async (id) => {
         let result = null
         let client = null
+        let row = null
         try {
             client = createClientConn()
-            const row = await getEventById(id)
-            console.log('row', row);
+            row = await getEventById(id)
             if (row) {
                 result = await client.query(`DELETE FROM events WHERE id = '${id}'`).catch(e => console.error(e))
-                console.log('result', result);
             } else {
                 throw new Error('Event does not exists')
             }
