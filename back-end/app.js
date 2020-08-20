@@ -11,9 +11,7 @@ app.use(express.json())
 app.use(express.urlencoded())
 
 const getTokenHeader = (req) => {
-  console.log('header', req)
   const headers = req.headers
-  console.log('----------> headers', headers)
   const token = headers && headers.authorization ? headers.authorization.replace(/Token /, '') : null
   return token
 }
@@ -28,9 +26,6 @@ app.post('/api/create-user', async (req, res) => {
 app.post('/api/api-auth', async (req, res) => {
   const username = req.body.username
   const password = req.body.password
-  console.log('.---> body', req.body)
-  console.log('.---> query', req.query)
-
   const user = await DbConnection().getUserByUsernameAndPassword(username, password).catch(e => console.error(e));
   if (!user) {
     res.status(401).send({

@@ -27,12 +27,12 @@ export default function Home(props) {
                 <Card key={e.id}>
                     <Card.Header>
                         <Accordion.Toggle as={Button} variant="link" eventKey={e.id}>
-                            Expand
+                            {e.event_name}
                         </Accordion.Toggle>
                     </Card.Header>
                     <Accordion.Collapse eventKey={e.id}>
                         <Card.Body>
-                            <h3>{e.event_name}</h3>
+                            <h3>{e.event_address}</h3>
                             <Button id={e.id} onClick={() => onDetailClick(e.id)}>Ver más</Button>
                         </Card.Body>
                     </Accordion.Collapse>
@@ -51,6 +51,7 @@ export default function Home(props) {
             <Accordion defaultActiveKey="0">
                 {events}
             </Accordion>
+            <Button onClick={e => props.history.push('/events/0')}>Nuevo</Button>
         </div>
     );
 }

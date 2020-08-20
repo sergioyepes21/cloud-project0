@@ -51,12 +51,28 @@ export default function Home(props) {
         if (eventId > 0) {
             backServices(token).putEvent(eventId, eventObj).then(res => {
                 alert('Updated successfully')
-            }).catch(e => console.error(e))
+            }).catch(e => {
+                console.error(e);
+                alert('Unexpected error. Try Later')
+            })
         } else {
             backServices(token).postEvent(eventObj).then(res => {
                 alert('Created successfully')
-            }).catch(e => console.error(e))
+                props.history.push('/home')
+            }).catch(e => {
+                console.error(e);
+                alert('Unexpected error. Try Later')
+            })
         }
+    }
+    const onDeleteClick = (e) => {
+        backServices(token).deleteEvent(eventId).then(res => {
+            alert('Deleted successfully')
+            props.history.push('/home')
+        }).catch(e => {
+            console.error(e);
+            alert('Unexpected error. Try Later')
+        })
     }
     const createEventComponent = (e) => {
         setEventName(e.event_name ?? '');
@@ -146,7 +162,7 @@ export default function Home(props) {
                         </Button>
                     </Col>
                     <Col sm={12}>
-                        <Button>Eliminar</Button>
+                        <Button disabled={eventId <= 0} onClick={e => onDeleteClick(e)}>Eliminar</Button>
                     </Col>
                 </Row>
             </Form>

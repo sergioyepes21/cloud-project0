@@ -219,6 +219,8 @@ module.exports.default = () => {
                 endClientConn(client)
             return Promise.reject(e)
         }
+        console.log('row', row);
+        
         return row
     }
     return {
