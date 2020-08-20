@@ -207,6 +207,7 @@ module.exports.default = () => {
         try {
             client = createClientConn()
             const row = await getEventById(id)
+            console.log('row', row);
             if (row) {
                 result = await client.query(`DELETE FROM events WHERE id = '${id}'`).catch(e => console.error(e))
             } else {
@@ -219,8 +220,6 @@ module.exports.default = () => {
                 endClientConn(client)
             return Promise.reject(e)
         }
-        console.log('row', row);
-        
         return row
     }
     return {

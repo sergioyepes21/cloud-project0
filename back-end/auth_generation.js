@@ -6,7 +6,6 @@ module.exports.default = () => {
         return token
     }
     const isValidToken = (token) => {
-        console.log('token', token)
         if (!token) {
             return [false, null]
         }

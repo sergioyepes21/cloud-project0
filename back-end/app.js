@@ -102,9 +102,12 @@ app.delete('/api/events/:event_id', async (req, res) => {
     })
     return
   }
-  res.json(await DbConnection().deleteEvent(req.params.event_id).catch(e => res.status(500).send({
+  const bodyResponse = await DbConnection().deleteEvent(req.params.event_id).catch(e => res.status(500).send({
     error: e
-  })));
+  }))
+  console.log('bodyResponse',bodyResponse);
+  
+  res.json(bodyResponse)
 })
 
 
